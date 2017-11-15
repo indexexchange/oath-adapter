@@ -1,5 +1,3 @@
-var BidTransformer = require('bid-transformer.js');
-
 function Partner(profile, configs, requiredResources, fns) {
 
     /* =====================================
@@ -13,30 +11,11 @@ function Partner(profile, configs, requiredResources, fns) {
             targetingKeys: profile.targetingKeys,
             rateLimiting: profile.features.rateLimiting
         };
-
-        _bidTransformers = {
-            targeting = BidTransformer({
-                inputCentsMultiplier: profile.bidUnitInCents,
-                outputCentsDivisor: 1,
-                outputPrecision: 0,
-                roundingType: 'FLOOR',
-                floor: 0,
-                buckets: [{
-                    max: 2000,
-                    step: 5
-                }, {
-                    max: 5000,
-                    step: 100
-                }]
-            }),
-            price = BidTransformer({
-                inputCentsMultiplier: profile.bidUnitInCents,
-                outputCentsDivisor: 1,
-                outputPrecision: 0,
-                roundingType: 'NONE'
-            })
-        }
     })();
+
+    function _emitStatsEvent(sessionId, statsEventName, slotCollectionObject) {
+        return 1;
+    }
 
     /* =====================================
      * Public Interface
@@ -44,7 +23,19 @@ function Partner(profile, configs, requiredResources, fns) {
 
     return {
         _configs: _configs,
-        _bidTransformers: _bidTransformers
+        _emitStatsEvent: _emitStatsEvent,
+        _bidTransformers: {
+            targeting: {
+                apply: function (price) {
+                    return price;
+                }
+            },
+            price: {
+                apply: function (price) {
+                    return price;
+                }
+            }
+        }
     };
 }
 
