@@ -20,7 +20,6 @@ function Partner(profile, configs, requiredResources, fns) {
     /* =====================================
      * Public Interface
      * ---------------------------------- */
-
     return {
         _configs: _configs,
         _emitStatsEvent: _emitStatsEvent,
