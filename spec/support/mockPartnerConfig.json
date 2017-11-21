@@ -1,27 +1,140 @@
 {
-    "timeout": 1000,
-    "xSlots": {
-        "1": {
-            "placementId": "54321",
-            "sizes": [
-                [300, 250]
-            ]
+    "oneDisplay": {
+        "na": {
+            "timeout": 1000,
+            "region": "na",
+            "networkId": "9959.1",
+            "xSlots": {
+                "1": {
+                    "placementId": "54321"
+                },
+                "2": {
+                    "placementId": "12345"
+                },
+                "3": {
+                    "placementId": "67890"
+                }
+            },
+            "mapping": {
+                "htSlot1": ["1", "2"],
+                "htSlot2": ["3"]
+            }
         },
-        "2": {
-            "placementId": "12345",
-            "sizes": [
-                [300, 600]
-            ]
+        "eu": {
+            "timeout": 1000,
+            "region": "eu",
+            "networkId": "9959.1",
+            "xSlots": {
+                "1": {
+                    "placementId": "54321",
+                    "width": 300,
+                    "height": 250
+                },
+                "2": {
+                    "placementId": "12345",
+                    "width": 300,
+                    "height": 250
+                },
+                "3": {
+                    "placementId": "67890",
+                    "width": 300,
+                    "height": 250
+                }
+            },
+            "mapping": {
+                "htSlot1": ["1", "2"],
+                "htSlot2": ["3"]
+            }
         },
-        "3": {
-            "placementId": "654321",
-            "sizes": [
-                [728, 90]
-            ]
+        "asia": {
+            "timeout": 1000,
+            "region": "asia",
+            "networkId": "9959.1",
+            "xSlots": {
+                "1": {
+                    "placementId": "54321",
+                    "width": 300,
+                    "height": 250
+                },
+                "2": {
+                    "placementId": "12345",
+                    "width": 300,
+                    "height": 250
+                },
+                "3": {
+                    "placementId": "67890",
+                    "width": 300,
+                    "height": 250
+                }
+            },
+            "mapping": {
+                "htSlot1": ["1", "2"],
+                "htSlot2": ["3"]
+            }
         }
     },
-    "mapping": {
-        "htSlot1": ["1", "2"],
-        "htSlot2": ["3"]
+    "oneMobile": {
+      "get": {
+          "timeout": 1000,
+          "networkId": "9599.1",
+          "xSlots": {
+              "1": {
+                  "dcn": "2c9d2b50015c5ce9db6aeeed8b9500d6",
+                  "pos": "header",
+                    "width": 300,
+                    "height": 250
+              },
+              "2": {
+                    "dcn": "d23c4234n",
+                    "pos": "footer",
+                    "width": 300,
+                    "height": 250
+              },
+              "3": {
+                    "dcn": "32d434fdfdc44324",
+                    "pos": "interstitial",
+                    "width": 300,
+                    "height": 250
+              }
+          },
+          "mapping": {
+              "htSlot1": ["1", "2"],
+              "htSlot2": ["3"]
+          }
+      }
+    },
+    "combined": {
+        "region": "na",
+        "networkId": "9959.1",
+        "timeout": 1000,
+        "xSlots": {
+            "1": {
+                "dcn": "2c9d2b50015c5ce9db6aeeed8b9500d6",
+                "pos": "header",
+                "width": 300,
+                "height": 250
+            },
+            "2": {
+                "dcn": "d23c4234n",
+                "pos": "footer",
+                "width": 300,
+                "height": 250
+            },
+            "3": {
+                "dcn": "32d434fdfdc44324",
+                "pos": "interstitial",
+                "width": 300,
+                "height": 250
+            },
+            "4": {
+                "placementId": "54321",
+                "width": 300,
+                "height": 250
+            }
+        },
+        "mapping": {
+            "mobile": ["1", "2", "3"],
+            "desktop": ["4"]
+        }
     }
 }
