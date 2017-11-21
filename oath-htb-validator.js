@@ -34,18 +34,71 @@ var Inspector = require('../../../libs/external/schema-inspector.js');
  * https://atinux.fr/schema-inspector/.
  */
 var partnerValidator = function (configs) {
+    var validRegions = {
+        eu: 0,
+        na: 1,
+        asia: 2
+    };
+
     var result = Inspector.validate({
         type: 'object',
         properties: {
+            region: {
+                type: 'string',
+                exec: function (schema, post) {
+                    if (!validRegions.hasOwnProperty(post)) {
+                        this.report('region must be one of the predefined values: ' + Object.keys(validRegions));
+                    }
+                }
+            },
+            networkId: {
+                type: 'string',
+                minLength: 1
+            },
             xSlots: {
                 type: 'object',
                 properties: {
                     '*': {
                         type: 'object',
+                        exec: function(schema, post){
+                            if (!((post.hasOwnProperty('dcn') && post.hasOwnProperty('pos')) || post.hasOwnProperty('placementId'))){
+                                this.report("xSlots must have either dcn and pos, or placementId");
+                            }
+                            return post;
+                        },
                         properties: {
                             placementId: {
-                                type: 'string',
+                                optional: true,
+                                type: ['string'],
                                 minLength: 1
+                            },
+                            dcn: {
+                                optional: true,
+                                type: ['string'],
+                                minLength: 1
+                            },
+                            pos: {
+                                optional: true,
+                                type: ['string'],
+                                minLength: 1
+                            },
+                            sizeId: {
+                                optional: true,
+                                type: ['string'],
+                                minLength: 1
+                            },
+                            pageId: {
+                                optional: true,
+                                type: ['string'],
+                                minLength: 1
+                            },
+                            width: {
+                                optional: false,
+                                type: 'number'
+                            },
+                            height: {
+                                optional: false,    
+                                type: 'number'
                             }
                         }
                     }
@@ -53,6 +106,7 @@ var partnerValidator = function (configs) {
             }
         }
     }, configs);
+
 
     if (!result.valid) {
         return result.format();
