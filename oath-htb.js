@@ -295,10 +295,8 @@ function OathHtb(configs) {
      */
     function __renderPixel(pixelUrl) {
         if (pixelUrl){
-            Network.img({
-                url: decodeURIComponent(pixelUrl),
-                method: 'GET',
-            });
+            var iframe = Browser.createHiddenIFrame(null);
+            System.documentWrite(iframe.contentDocument, pixelUrl);
         }
     }
 
