@@ -396,10 +396,10 @@ function OathHtb(configs) {
         * leave empty;
         */
 
-        var pixelUrl = '';
+        var pixels = '';
 
-        if (curBid.hasOwnProperty('ext')){
-            pixelUrl = curBid.ext.pixels ? curBid.ext.pixels : '';
+        if (adResponse.hasOwnProperty('ext')){
+            pixels = adResponse.ext.pixels || '';
         }
 
         /* ---------------------------------------------------------------------------------------*/
@@ -455,7 +455,7 @@ function OathHtb(configs) {
             price: bidDealId ? bidDealId : targetingCpm,
             timeOfExpiry: __profile.features.demandExpiry.enabled ? (__profile.features.demandExpiry.value + System.now()) : 0,
             auxFn: __renderPixel,
-            auxArgs: [pixelUrl]
+            auxArgs: [pixels]
         });
 
         //? if (FEATURES.INTERNAL_RENDER) {
