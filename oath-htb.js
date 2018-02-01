@@ -440,6 +440,9 @@ function OathHtb(configs) {
 
         //? if (FEATURES.RETURN_CREATIVE) {
         curReturnParcel.adm = bidCreative;
+        if (pixels) {
+            curReturnParcel.winNotice = __renderPixel.bind(null, pixels);
+        }
         //? }
 
         //? if (FEATURES.RETURN_PRICE) {
@@ -452,7 +455,8 @@ function OathHtb(configs) {
             adm: bidCreative,
             requestId: curReturnParcel.requestId,
             size: curReturnParcel.size,
-            price: bidDealId ? bidDealId : targetingCpm,
+            price: targetingCpm ? targetingCpm : undefined,
+            dealId: bidDealId ? bidDealId : undefined,
             timeOfExpiry: __profile.features.demandExpiry.enabled ? (__profile.features.demandExpiry.value + System.now()) : 0,
             auxFn: __renderPixel,
             auxArgs: [pixels]
