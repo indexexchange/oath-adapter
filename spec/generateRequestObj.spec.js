@@ -48,6 +48,7 @@ function generateReturnParcels(profile, partnerConfig) {
                 });
             }
         }
+
     }
 
     return returnParcels;
@@ -66,109 +67,196 @@ describe('generateRequestObj', function () {
     var libraryStubData = require('./support/libraryStubData.js');
     var partnerModule = proxyquire('../oath-htb.js', libraryStubData);
     var partnerConfig = require('./support/mockPartnerConfig.json');
+    var oneDisplayConfigs = require('./support/mockPartnerConfig.json').oneDisplay;
+    var oneMobileConfigs = require('./support/mockPartnerConfig.json').oneMobile;
+    var combinedConfigs = require('./support/mockPartnerConfig.json').combined;
     var expect = require('chai').expect;
     /* -------------------------------------------------------------------- */
 
-    /* Instantiate your partner module */
-    var partnerModule = partnerModule(partnerConfig);
-    var partnerProfile = partnerModule.profile;
+    var partnerInstance = partnerModule(partnerConfig);
+    var partnerProfile = partnerInstance.profile;
 
-    /* Generate dummy return parcels based on MRA partner profile */
-    var returnParcels;
     var requestObject;
+    var returnParcels;
+       /**
+    * Helper function used to apply assertion functions to each parcel object. 
+    * 
+    * @param {object} Partner configuration.
+    * @param {function} assertion function.
+    */
+    function assertRequestsForPartnerConfig(partnerConfig, assert) {
+        /* Instatiate your partner module */
+        partnerInstance = partnerModule(partnerConfig);
+        partnerProfile = partnerInstance.profile;
 
-    /* Generate a request object using generated mock return parcels. */
-    returnParcels = generateReturnParcels(partnerProfile, partnerConfig);
+        /* Generate a request object using generated mock return parcels. */
+        returnParcels = generateReturnParcels(partnerProfile, partnerConfig);
 
-    /* -------- IF SRA, generate a single request for each parcel -------- */
-    if (partnerProfile.architecture) {
-        requestObject = partnerModule.generateRequestObj(returnParcels);
-
-        /* Simple type checking, should always pass */
-        it('SRA - should return a correctly formatted object', function () {
-            var result = inspector.validate({
-                type: 'object',
-                strict: true,
-                properties: {
-                    url: {
-                        type: 'string',
-                        minLength: 1
-                    },
-                    data: {
-                        type: 'object'
-                    },
-                    callbackId: {
-                        type: 'string',
-                        minLength: 1
-                    }
-                }
-            }, requestObject);
-
-            expect(result.valid).to.be.true;
+        returnParcels.forEach((item) => {
+            requestObject = partnerInstance.generateRequestObj([item]);
+            if (assert) {
+                assert(requestObject, item);
+            }
         });
-
-        /* Test that the generateRequestObj function creates the correct object by building a URL
-            * from the results. This is the bid request url the wrapper will send out to get demand
-            * for your module.
-            *
-            * The url should contain all the necessary parameters for all of the request parcels
-            * passed into the function.
-            */
-
-        /* ---------- ADD MORE TEST CASES TO TEST AGAINST REAL VALUES ------------*/
-        it('should correctly build a url', function () {
-            /* Write unit tests to verify that your bid request url contains the correct
-                * request params, url, etc.
-                */
-            expect(requestObject).to.exist;
-        });
-        /* -----------------------------------------------------------------------*/
-
-    /* ---------- IF MRA, generate a single request for each parcel ---------- */
-    } else {
-        for (var i = 0; i < returnParcels.length; i++) {
-            requestObject = partnerModule.generateRequestObj([returnParcels[i]]);
-
-            /* Simple type checking, should always pass */
-            it('MRA - should return a correctly formatted object', function () {
-                var result = inspector.validate({
-                    type: 'object',
-                    strict: true,
-                    properties: {
-                        url: {
-                            type: 'string',
-                            minLength: 1
-                        },
-                        data: {
-                            type: 'object'
-                        },
-                        callbackId: {
-                            type: 'string',
-                            minLength: 1
-                        }
-                    }
-                }, requestObject);
-
-                expect(result.valid).to.be.true;
-            });
-
-            /* Test that the generateRequestObj function creates the correct object by building a URL
-                * from the results. This is the bid request url that wrapper will send out to get demand
-                * for your module.
-                *
-                * The url should contain all the necessary parameters for all of the request parcels
-                * passed into the function.
-                */
-
-            /* ---------- ADD MORE TEST CASES TO TEST AGAINST REAL VALUES ------------*/
-            it('should correctly build a url', function () {
-                /* Write unit tests to verify that your bid request url contains the correct
-                    * request params, url, etc.
-                    */
-                expect(requestObject).to.exist;
-            });
-            /* -----------------------------------------------------------------------*/
-        }
     }
 
+    /**
+    * Validates request object format. 
+    * 
+    * @param {object} Partner rquest object.
+    * @return {object} Validation result object.
+    */
+    function validateRequestObject(requestObject) {
+        return inspector.validate({
+            type: 'object',
+            strict: true,
+            properties: {
+                url: {
+                    type: 'string',
+                    minLength: 1
+                },
+                callbackId: {
+                    type: 'string',
+                    minLength: 1
+                }
+            }
+        }, requestObject);
+    }
+
+    /* Test that the generateRequestObj function creates the correct object by building a URL
+     * from the results. This is the bid request url that wrapper will send out to get demand
+     * for your module.
+     *
+     * The url should contain all the necessary parameters for all of the request parcels
+     * passed into the function.
+     */
+    describe('oneDisplay endpoint',  () => {
+        it('should return a correctly formated objects', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, (requestObject) => {
+                var result = validateRequestObject(requestObject);
+
+                expect(result.valid).to.be.true;
+            })
+        });
+
+        it('should correctly set NA url', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                expect(url.match('adserver-us.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
+            });
+        });
+
+        it('should correctly set EU url', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.eu, ({url}) => {
+                expect(url.match('adserver-eu.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
+            });
+        });
+
+        it('should correctly set ASIA url', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.asia, ({url}) => {
+                expect(url.match('adserver-as.adtech.advertising.com').length, 'url is incorrect').to.equal(1);
+            });
+        });
+
+        it('should correctly set CMD request paramater', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                var match = url.match(/;cmd=(.*?);/);
+                expect(match[1], 'cmd is incorrect or not present').to.equal('bid');
+            });
+        });
+
+        it('should correctly set CORS request paramater', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                var match = url.match(/;cors=(.*?);/);
+                expect(match[1], 'CORS is incorrect or not present').to.equal('yes');
+            });
+        });
+
+        it('should correctly set V request paramater', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                var match = url.match(/;v=(.*?);/);
+                expect(match[1], "V is incorrect or not present").to.equal('2');
+            });
+        });
+
+        it('should correctly set MISC request paramater', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                var match = url.match(/;misc=(.*?);/);
+                expect(match[1], 'V is incorrect or not present').to.be.not.null;
+            });
+        });
+
+        it('should correctly set networkId', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                expect(url.match('9959.1').length, "networkId is incorrect").to.equal(1);
+            });
+        });
+
+        it('should correctly set placementId request parameter for each request/slot', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}, requestStub) => {
+                expect(url.match(requestStub.xSlotRef.placementId).length, "placementId is incorrect").to.equal(1);
+            });
+        });
+
+        it('should set partner statsId correctly', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na);
+
+            expect(partnerProfile.statsId).to.equal('OATH');
+        });
+    });
+
+    describe('oneMobile endpoint', () => {
+        it('should return a correctly formated objects', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, (requestObject) => {
+                var result = validateRequestObject(requestObject);
+
+                expect(result.valid).to.be.true;
+            })
+        });
+
+        it('should correctly set endpoint url', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
+                expect(url.match('hb.nexage.com', 'url is incorrect').length).to.equal(1);
+            });
+        });
+
+        it('should correctly set CMD request paramater', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
+                var match = url.match(/cmd=(.*?)(&|$)/);
+                expect(match[1], 'cmd is incorrect or not present').to.equal('bid');
+            });
+        });
+
+        it('should correctly set dcn request paramater', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}, requestStub) => {
+                var match = url.match(/&dcn=(.*?)(&|$)/);
+                expect(match[1], 'dcn is incorrect or not present').to.equal(requestStub.xSlotRef.dcn);
+            });
+        });
+
+        it('should correctly set pos request paramater', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}, requestStub) => {
+                var match = url.match(/&pos=(.*?)(&|$)/);
+                expect(match[1], 'pos is incorrect or not present').to.equal(requestStub.xSlotRef.pos);
+            });
+        });
+
+        it('should set partner statsId correctly for', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get);
+
+            expect(partnerProfile.statsId).to.equal('OATHM');
+        });
+    });
+
+    describe('combined slots configuration ', () => {
+        it('should resolve endpoints correctly for different slots', function () {
+            assertRequestsForPartnerConfig(combinedConfigs, ({url}, {htSlot}) => {
+                if (htSlot.getId() === 'mobile') {
+                    expect(url.match('hb.nexage.com', 'url is incorrect').length).to.equal(1);
+                } else {
+                    expect(url.match('adserver-us.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
+                }
+
+            })
+        });
+    });
 });
