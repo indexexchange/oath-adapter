@@ -91,14 +91,6 @@ var partnerValidator = function (configs) {
                                 optional: true,
                                 type: ['string'],
                                 minLength: 1
-                            },
-                            width: {
-                                optional: false,
-                                type: 'number'
-                            },
-                            height: {
-                                optional: false,    
-                                type: 'number'
                             }
                         }
                     }
