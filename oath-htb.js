@@ -488,7 +488,7 @@ function OathHtb(configs) {
             partnerId: 'OathHtb', // PartnerName
             namespace: 'OathHtb', // Should be same as partnerName
             statsId: 'OATH', // Unique partner identifier
-            version: '2.1.0',
+            version: '2.1.1',
             targetingType: 'slot',
             enabledAnalytics: {
                 requestTime: true
