@@ -61,12 +61,12 @@ function OathHtb(configs) {
         oneDisplay: {
             eu: '//adserver-eu.adtech.advertising.com',
             na: '//adserver-us.adtech.advertising.com',
-            asia: '//adserver-as.adtech.advertising.com'
+            asia: '//adserver-as.adtech.advertising.com',
         },
         oneMobile: {
             get: '//hb.nexage.com'
         }
-    }; 
+    };
 
     /* Private
      * ---------------------------------- */
@@ -130,7 +130,8 @@ function OathHtb(configs) {
     * @return {object} request object.
     */
     function __generateOneDisplayRequest(xSlot) {
-        var baseUrl = Browser.getProtocol() + endpointsUrls.oneDisplay[configs.region] + '/pubapi/3.0/' + configs.networkId;
+        var region = xSlot.region || endpointsUrls.oneDisplay.na;
+        var baseUrl = Browser.getProtocol() + endpointsUrls.oneDisplay[region] + '/pubapi/3.0/' + xSlot.networkId;
         var requestId = '_' + System.generateUniqueId();
 
         /* sizeid & pageid */
