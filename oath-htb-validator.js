@@ -35,62 +35,39 @@ var Inspector = require('../../../libs/external/schema-inspector.js');
  */
 var partnerValidator = function (configs) {
     var validRegions = {
-        eu: 0,
-        na: 1,
-        asia: 2
+        eu: 0, na: 1, asia: 2
     };
 
     var result = Inspector.validate({
-        type: 'object',
-        properties: {
-            region: {
-                type: 'string',
-                exec: function (schema, post) {
-                    if (!validRegions.hasOwnProperty(post)) {
-                        this.report('region must be one of the predefined values: ' + Object.keys(validRegions));
-                    }
-                }
-            },
-            networkId: {
-                type: 'string',
-                minLength: 1
-            },
+        type: 'object', properties: {
             xSlots: {
-                type: 'object',
-                properties: {
+                type: 'object', properties: {
                     '*': {
-                        type: 'object',
-                        exec: function(schema, post){
-                            if (!((post.hasOwnProperty('dcn') && post.hasOwnProperty('pos')) || post.hasOwnProperty('placementId'))){
-                                this.report("xSlots must have either dcn and pos, or placementId");
+                        type: 'object', exec: function (schema, post) {
+                            if (!((post.hasOwnProperty('dcn') && post.hasOwnProperty('pos')) ||
+                                    post.hasOwnProperty('networkId') && post.hasOwnProperty('placementId'))) {
+                                this.report("xSlots must have either dcn and pos, or networkId and placementId");
                             }
                             return post;
-                        },
-                        properties: {
-                            placementId: {
-                                optional: true,
-                                type: ['string'],
-                                minLength: 1
-                            },
-                            dcn: {
-                                optional: true,
-                                type: ['string'],
-                                minLength: 1
-                            },
-                            pos: {
-                                optional: true,
-                                type: ['string'],
-                                minLength: 1
-                            },
-                            sizeId: {
-                                optional: true,
-                                type: ['string'],
-                                minLength: 1
-                            },
-                            pageId: {
-                                optional: true,
-                                type: ['string'],
-                                minLength: 1
+                        }, properties: {
+                            region: {
+                                type: 'string', exec: function (schema, post) {
+                                    if (!validRegions.hasOwnProperty(post)) {
+                                        this.report('region must be one of the predefined values: ' + Object.keys(validRegions));
+                                    }
+                                }
+                            }, networkId: {
+                                optional: true, type: 'string', minLength: 1
+                            }, placementId: {
+                                optional: true, type: ['string'], minLength: 1
+                            }, dcn: {
+                                optional: true, type: ['string'], minLength: 1
+                            }, pos: {
+                                optional: true, type: ['string'], minLength: 1
+                            }, sizeId: {
+                                optional: true, type: ['string'], minLength: 1
+                            }, pageId: {
+                                optional: true, type: ['string'], minLength: 1
                             }
                         }
                     }
