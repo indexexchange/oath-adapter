@@ -85,7 +85,7 @@ describe('generateRequestObj', function () {
     * @param {function} assertion function.
     */
     function assertRequestsForPartnerConfig(partnerConfig, assert) {
-        /* Instatiate your partner module */
+        /* Instantiate your partner module */
         partnerInstance = partnerModule(partnerConfig);
         partnerProfile = partnerInstance.profile;
 
@@ -188,6 +188,12 @@ describe('generateRequestObj', function () {
         it('should correctly set networkId', function () {
             assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
                 expect(url.match('9959.1').length, "networkId is incorrect").to.equal(1);
+            });
+            assertRequestsForPartnerConfig(oneDisplayConfigs.eu, ({url}) => {
+                expect(url.match('9159.1').length, "networkId is incorrect").to.equal(1);
+            });
+            assertRequestsForPartnerConfig(oneDisplayConfigs.asia, ({url}) => {
+                expect(url.match('9259.1').length, "networkId is incorrect").to.equal(1);
             });
         });
 
