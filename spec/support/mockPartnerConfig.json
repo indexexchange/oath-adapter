@@ -2,16 +2,20 @@
     "oneDisplay": {
         "na": {
             "timeout": 1000,
-            "region": "na",
-            "networkId": "9959.1",
             "xSlots": {
                 "1": {
+                    "region": "na",
+                    "networkId": "9959.1",
                     "placementId": "54321"
                 },
                 "2": {
+                    "region": "na",
+                    "networkId": "9959.1",
                     "placementId": "12345"
                 },
                 "3": {
+                    "region": "na",
+                    "networkId": "9959.1",
                     "placementId": "67890"
                 }
             },
@@ -22,20 +26,24 @@
         },
         "eu": {
             "timeout": 1000,
-            "region": "eu",
-            "networkId": "9959.1",
             "xSlots": {
                 "1": {
+                    "region": "eu",
+                    "networkId": "9159.1",
                     "placementId": "54321",
                     "width": 300,
                     "height": 250
                 },
                 "2": {
+                    "region": "eu",
+                    "networkId": "9159.1",
                     "placementId": "12345",
                     "width": 300,
                     "height": 250
                 },
                 "3": {
+                    "region": "eu",
+                    "networkId": "9159.1",
                     "placementId": "67890",
                     "width": 300,
                     "height": 250
@@ -48,20 +56,24 @@
         },
         "asia": {
             "timeout": 1000,
-            "region": "asia",
-            "networkId": "9959.1",
             "xSlots": {
                 "1": {
+                    "region": "asia",
+                    "networkId": "9259.1",
                     "placementId": "54321",
                     "width": 300,
                     "height": 250
                 },
                 "2": {
+                    "region": "asia",
+                    "networkId": "9259.1",
                     "placementId": "12345",
                     "width": 300,
                     "height": 250
                 },
                 "3": {
+                    "region": "asia",
+                    "networkId": "9259.1",
                     "placementId": "67890",
                     "width": 300,
                     "height": 250
@@ -76,7 +88,6 @@
     "oneMobile": {
       "get": {
           "timeout": 1000,
-          "networkId": "9599.1",
           "xSlots": {
               "1": {
                   "dcn": "2c9d2b50015c5ce9db6aeeed8b9500d6",
@@ -104,8 +115,6 @@
       }
     },
     "combined": {
-        "region": "na",
-        "networkId": "9959.1",
         "timeout": 1000,
         "xSlots": {
             "1": {
@@ -127,6 +136,8 @@
                 "height": 250
             },
             "4": {
+                "networkId": "9959.1",
+                "region": "na",
                 "placementId": "54321",
                 "width": 300,
                 "height": 250
