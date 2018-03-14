@@ -35,7 +35,9 @@ var Inspector = require('../../../libs/external/schema-inspector.js');
  */
 var partnerValidator = function (configs) {
     var validRegions = {
-        eu: 0, na: 1, asia: 2
+      eu: 0,
+      na: 1,
+      asia: 2
     };
 
     var result = Inspector.validate({

@@ -61,7 +61,7 @@ function OathHtb(configs) {
         oneDisplay: {
             eu: '//adserver-eu.adtech.advertising.com',
             na: '//adserver-us.adtech.advertising.com',
-            asia: '//adserver-as.adtech.advertising.com',
+            asia: '//adserver-as.adtech.advertising.com'
         },
         oneMobile: {
             get: '//hb.nexage.com'
