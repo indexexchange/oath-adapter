@@ -56,7 +56,7 @@ var partnerValidator = function (configs) {
                                 optional: true,
                                 type: 'string',
                                 exec: function (schema, post) {
-                                    if (!validRegions.hasOwnProperty(post)) {
+                                    if (post && !validRegions.hasOwnProperty(post)) {
                                         this.report('region must be one of the predefined values: ' + Object.keys(validRegions));
                                     }
                                 }
