@@ -28,6 +28,7 @@ var Utilities = require('utilities.js');
 var OpenRtb = require('openrtb.js');
 var EventsService;
 var RenderService;
+var ComplianceService;
 
 //? if (DEBUG) {
 var ConfigValidators = require('config-validators.js');
@@ -148,6 +149,14 @@ function OathHtb(configs) {
 
         if (xSlot.bidFloor) {
             requestParams.bidFloor = xSlot.bidFloor;
+        }
+
+        var consentData = ComplianceService.gdpr.getConsent();
+        var consentString = consentData && consentData.consentString;
+
+        if (ComplianceService.gdpr.isPrivacyEnabled() && consentString) {
+            requestParams.gdpr = 1;
+            requestParams.euconsent = consentString;
         }
 
         var url = Network.buildUrl(baseUrl, [xSlot.placementId, pageId, sizeId, 'ADTECH;']);
