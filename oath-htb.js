@@ -110,6 +110,10 @@ function OathHtb(configs) {
             requestParams.secure = 1;
         }
 
+        if (ComplianceService.gdpr.isPrivacyEnabled()) {
+            __appGdprRequestParams(requestParams);
+        }
+
         var url = Network.buildUrl(baseUrl, ['bidRequest?cmd=bid']);
 
         for (var parameter in requestParams) {
@@ -151,12 +155,8 @@ function OathHtb(configs) {
             requestParams.bidFloor = xSlot.bidFloor;
         }
 
-        var consentData = ComplianceService.gdpr.getConsent();
-        var consentString = consentData && consentData.consentString;
-
-        if (ComplianceService.gdpr.isPrivacyEnabled() && consentString) {
-            requestParams.gdpr = 1;
-            requestParams.euconsent = consentString;
+        if (ComplianceService.gdpr.isPrivacyEnabled()) {
+            __appGdprRequestParams(requestParams);
         }
 
         var url = Network.buildUrl(baseUrl, [xSlot.placementId, pageId, sizeId, 'ADTECH;']);
@@ -186,8 +186,16 @@ function OathHtb(configs) {
     function __isOneMobileRequest(xSlot) {
         return xSlot.dcn && xSlot.pos;
     }
+    
+    function __appGdprRequestParams(requestParams) {
+        var consentData = ComplianceService.gdpr.getConsent();
 
-
+        if (consentData && consentData.consentString) {
+            requestParams.gdpr = 1;
+            requestParams.euconsent = consentData.consentString;
+        }
+    }
+    
     /**
      * Generates the request URL and query data to the endpoint for the xSlots
      * in the given returnParcels.
