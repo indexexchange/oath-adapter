@@ -111,7 +111,7 @@ function OathHtb(configs) {
         }
 
         if (ComplianceService.isPrivacyEnabled()) {
-            __appGdprParams(requestParams);
+            __addGdprParams(requestParams);
         }
 
         var url = Network.buildUrl(baseUrl, ['bidRequest?cmd=bid']);
@@ -156,7 +156,7 @@ function OathHtb(configs) {
         }
 
         if (ComplianceService.isPrivacyEnabled()) {
-            __appGdprParams(requestParams);
+            __addGdprParams(requestParams);
         }
 
         var url = Network.buildUrl(baseUrl, [xSlot.placementId, pageId, sizeId, 'ADTECH;']);
@@ -187,7 +187,7 @@ function OathHtb(configs) {
         return xSlot.dcn && xSlot.pos;
     }
     
-    function __appGdprParams(params) {
+    function __addGdprParams(params) {
         var consentData = ComplianceService.gdpr.getConsent();
 
         if (consentData && consentData.consentString) {
