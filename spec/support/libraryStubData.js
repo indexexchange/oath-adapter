@@ -112,6 +112,12 @@ var libraryStubData = {
                 registerAd: function () {
                     return '_' + Math.random().toString(36).substr(2, 9);
                 }
+            },
+            ComplianceService: {
+                gdpr: {
+                    getConsent: function () {}
+                },
+                isPrivacyEnabled: function () {}
             }
         },
     },
