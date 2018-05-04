@@ -110,8 +110,8 @@ function OathHtb(configs) {
             requestParams.secure = 1;
         }
 
-        if (ComplianceService.gdpr.isPrivacyEnabled()) {
-            __appGdprRequestParams(requestParams);
+        if (ComplianceService.isPrivacyEnabled()) {
+            __appGdprParams(requestParams);
         }
 
         var url = Network.buildUrl(baseUrl, ['bidRequest?cmd=bid']);
@@ -155,8 +155,8 @@ function OathHtb(configs) {
             requestParams.bidFloor = xSlot.bidFloor;
         }
 
-        if (ComplianceService.gdpr.isPrivacyEnabled()) {
-            __appGdprRequestParams(requestParams);
+        if (ComplianceService.isPrivacyEnabled()) {
+            __appGdprParams(requestParams);
         }
 
         var url = Network.buildUrl(baseUrl, [xSlot.placementId, pageId, sizeId, 'ADTECH;']);
@@ -187,12 +187,12 @@ function OathHtb(configs) {
         return xSlot.dcn && xSlot.pos;
     }
     
-    function __appGdprRequestParams(requestParams) {
+    function __appGdprParams(params) {
         var consentData = ComplianceService.gdpr.getConsent();
 
         if (consentData && consentData.consentString) {
-            requestParams.gdpr = 1;
-            requestParams.euconsent = consentData.consentString;
+            params.gdpr = 1;
+            params.euconsent = consentData.consentString;
         }
     }
     
@@ -493,6 +493,7 @@ function OathHtb(configs) {
     (function __constructor() {
         EventsService = SpaceCamp.services.EventsService;
         RenderService = SpaceCamp.services.RenderService;
+        ComplianceService = SpaceCamp.services.ComplianceService;
 
         /* =============================================================================
          * STEP 1  | Partner Configuration
