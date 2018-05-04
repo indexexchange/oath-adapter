@@ -115,9 +115,16 @@ var libraryStubData = {
             },
             ComplianceService: {
                 gdpr: {
-                    getConsent: function () {}
+                    getConsent: function () {
+                        return {
+                            applies: true,
+                            consentString: 'stubbed-consent'
+                        };
+                    }
                 },
-                isPrivacyEnabled: function () {}
+                isPrivacyEnabled: function () {
+                    return true;
+                }
             }
         },
     },
