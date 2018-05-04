@@ -208,6 +208,13 @@ describe('generateRequestObj', function () {
 
             expect(partnerProfile.statsId).to.equal('OATH');
         });
+
+        it('should correctly set GDPR request params', function () {
+            assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
+                expect(url).to.contain('euconsent=stubbed-consent');
+                expect(url).to.contain('gdpr=1');
+            });
+        });
     });
 
     describe('oneMobile endpoint', () => {
@@ -250,6 +257,13 @@ describe('generateRequestObj', function () {
             assertRequestsForPartnerConfig(oneMobileConfigs.get);
 
             expect(partnerProfile.statsId).to.equal('OATHM');
+        });
+
+        it('should correctly set GDPR request params', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
+                expect(url).to.contain('euconsent=stubbed-consent');
+                expect(url).to.contain('gdpr=1');
+            });
         });
     });
 
