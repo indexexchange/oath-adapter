@@ -190,9 +190,12 @@ function OathHtb(configs) {
     function __addGdprParams(params) {
         var consentData = ComplianceService.gdpr.getConsent();
 
-        if (consentData && consentData.applies && consentData.consentString) {
+        if (consentData && consentData.applies) {
             params.gdpr = 1;
-            params.euconsent = consentData.consentString;
+            
+            if (consentData.consentString) {
+                params.euconsent = consentData.consentString;
+            }
         }
     }
     
