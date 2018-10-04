@@ -108,6 +108,21 @@
                     "height": 250
               }
           },
+          "identityData": {
+              "AdserverOrgIp": {
+                  "data": {
+                      "source": "adserver.org",
+                      "uids": [
+                          {
+                              "id": "uid123",
+                              "ext": {
+                                  "rtiPartner": "stubbed-tdid"
+                              }
+                          }
+                      ]
+                  }
+              }
+          },
           "mapping": {
               "htSlot1": ["1", "2"],
               "htSlot2": ["3"]

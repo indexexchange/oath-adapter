@@ -94,9 +94,10 @@ function OathHtb(configs) {
     /**
     * Construct request object for OneMobile Endpoint.
     * @param {object} xSlot
+    * @param {string} tdid
     * @return {object} request object.
     */
-    function __generateOneMobileRequest(xSlot) {
+    function __generateOneMobileRequest(xSlot, tdid) {
         var protocol = Browser.getProtocol();
         var baseUrl = protocol + endpointsUrls.oneMobile.get;
         var requestId = '_' + System.generateUniqueId();
@@ -105,6 +106,10 @@ function OathHtb(configs) {
             dcn: xSlot.dcn,
             pos: xSlot.pos
         };
+        
+        if (tdid) {
+            requestParams.tdid = tdid;
+        }
 
         if (protocol === 'https:') {
             requestParams.secure = 1;
@@ -273,10 +278,16 @@ function OathHtb(configs) {
 
         var returnParcel = returnParcels[0];
         var xSlot = returnParcel.xSlotRef;
+    
+        var adserverOrgIp = returnParcel.identityData && returnParcel.identityData.AdserverOrgIp;
+        var uids  = adserverOrgIp && adserverOrgIp.data && adserverOrgIp.data.uids;
+        var uid = uids && uids[0];
+        var tdid = uid && uid.ext && uid.ext.rtiPartner;
+        
         if (__isOneMobileRequest(xSlot)) {
             __profile.statsId = 'OATHM';
 
-            return __generateOneMobileRequest(xSlot);
+            return __generateOneMobileRequest(xSlot, tdid);
         }
 
         return __generateOneDisplayRequest(xSlot);

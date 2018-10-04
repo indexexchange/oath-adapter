@@ -44,6 +44,7 @@ function generateReturnParcels(profile, partnerConfig) {
                     htSlot: htSlot,
                     ref: "",
                     xSlotRef: partnerConfig.xSlots[xSlotName],
+                    identityData: partnerConfig.identityData,
                     requestId: '_' + Date.now()
                 });
             }
@@ -263,6 +264,12 @@ describe('generateRequestObj', function () {
             assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
                 expect(url).to.contain('euconsent=stubbed-consent');
                 expect(url).to.contain('gdpr=1');
+            });
+        });
+
+        it('should correctly set TDID request param', function () {
+            assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
+                expect(url).to.contain('tdid=stubbed-tdid');
             });
         });
     });
