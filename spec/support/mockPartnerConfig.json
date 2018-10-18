@@ -112,14 +112,22 @@
               "AdserverOrgIp": {
                   "data": {
                       "source": "adserver.org",
-                      "uids": [
-                          {
-                              "id": "uid123",
-                              "ext": {
-                                  "rtiPartner": "stubbed-tdid"
-                              }
-                          }
-                      ]
+                      "uids": [{
+                        "id": "uid123",
+                        "ext": {
+                            "rtiPartner": "stubbed-tdid"
+                        }
+                     }, {
+                        "id": "TRUE",
+                        "ext": {
+                            "rtiPartner": "TDID_LOOKUP"
+                        }
+                     }, {
+                        "id": "2018-08-06T18:55:26",
+                        "ext": {
+                            "rtiPartner": "TDID_CREATED_AT"
+                        }
+                     }]
                   }
               }
           },
