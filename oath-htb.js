@@ -280,9 +280,14 @@ function OathHtb(configs) {
         var xSlot = returnParcel.xSlotRef;
     
         var adserverOrgIp = returnParcel.identityData && returnParcel.identityData.AdserverOrgIp;
-        var uids  = adserverOrgIp && adserverOrgIp.data && adserverOrgIp.data.uids;
-        var uid = uids && uids[0];
-        var tdid = uid && uid.ext && uid.ext.rtiPartner;
+        var uids  = (adserverOrgIp && adserverOrgIp.data && adserverOrgIp.data.uids) || [];
+        var tdid;
+
+        uids.forEach(function (uid) {
+            if (uid && uid.ext && uid.ext.rtiPartner === 'TDID') {
+                tdid = uid.id;
+            }
+        });
         
         if (__isOneMobileRequest(xSlot)) {
             __profile.statsId = 'OATHM';

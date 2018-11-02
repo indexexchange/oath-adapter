@@ -113,9 +113,9 @@
                   "data": {
                       "source": "adserver.org",
                       "uids": [{
-                        "id": "uid123",
+                        "id": "stubbed-tdid",
                         "ext": {
-                            "rtiPartner": "stubbed-tdid"
+                            "rtiPartner": "TDID"
                         }
                      }, {
                         "id": "TRUE",
