@@ -60,14 +60,21 @@ function OathHtb(configs) {
      */
     var endpointsUrls = {
         oneDisplay: {
-            eu: '//adserver-eu.adtech.advertising.com',
-            na: '//adserver-us.adtech.advertising.com',
-            asia: '//adserver-as.adtech.advertising.com'
+            eu: 'adserver-eu.adtech.advertising.com',
+            na: 'adserver-us.adtech.advertising.com',
+            asia: 'adserver-as.adtech.advertising.com'
         },
         oneMobile: {
-            get: '//hb.nexage.com'
+            get: 'c2shb.ssp.yahoo.com'
         }
     };
+
+    /**
+     * The protocol used to make the bid requests.
+     *
+     * @private {string}
+     */
+    var __proto = 'https://';
 
     /* Private
      * ---------------------------------- */
@@ -90,25 +97,21 @@ function OathHtb(configs) {
     /* =====================================
      * Functions
      * ---------------------------------- */
-    
+
     /**
     * Construct request object for OneMobile Endpoint.
     * @param {object} xSlot
     * @return {object} request object.
     */
     function __generateOneMobileRequest(xSlot) {
-        var protocol = Browser.getProtocol();
-        var baseUrl = protocol + endpointsUrls.oneMobile.get;
+        var baseUrl = __proto + endpointsUrls.oneMobile.get;
         var requestId = '_' + System.generateUniqueId();
 
         var requestParams = {
             dcn: xSlot.dcn,
-            pos: xSlot.pos
+            pos: xSlot.pos,
+            secure: 1
         };
-
-        if (protocol === 'https:') {
-            requestParams.secure = 1;
-        }
 
         if (ComplianceService.isPrivacyEnabled()) {
             __addGdprParams(requestParams);
@@ -136,7 +139,7 @@ function OathHtb(configs) {
     */
     function __generateOneDisplayRequest(xSlot) {
         var region = xSlot.region || endpointsUrls.oneDisplay.na;
-        var baseUrl = Browser.getProtocol() + endpointsUrls.oneDisplay[region] + '/pubapi/3.0/' + xSlot.networkId;
+        var baseUrl = __proto + endpointsUrls.oneDisplay[region] + '/pubapi/3.0/' + xSlot.networkId;
         var requestId = '_' + System.generateUniqueId();
 
         /* sizeid & pageid */
@@ -186,19 +189,19 @@ function OathHtb(configs) {
     function __isOneMobileRequest(xSlot) {
         return xSlot.dcn && xSlot.pos;
     }
-    
+
     function __addGdprParams(params) {
         var consentData = ComplianceService.gdpr.getConsent();
 
         if (consentData && consentData.applies) {
             params.gdpr = 1;
-            
+
             if (consentData.consentString) {
                 params.euconsent = consentData.consentString;
             }
         }
     }
-    
+
     /**
      * Generates the request URL and query data to the endpoint for the xSlots
      * in the given returnParcels.
@@ -369,7 +372,7 @@ function OathHtb(configs) {
         headerStatsInfo[htSlotId] = {};
         headerStatsInfo[htSlotId][curReturnParcel.requestId] = [curReturnParcel.xSlotName];
 
-        // MRA 
+        // MRA
         var curBid = ortbResponse.getBids()[0];
 
         /* No matching bid found so its a pass */
@@ -377,7 +380,7 @@ function OathHtb(configs) {
             //? if (DEBUG) {
             Scribe.info(__profile.partnerId + ' no bid response for { id: ' + curReturnParcel.xSlotRef.placementId + ' }.');
             //? }
-            
+
             if (__profile.enabledAnalytics.requestTime) {
                 __baseClass._emitStatsEvent(sessionId, 'hs_slot_pass', headerStatsInfo);
             }
@@ -393,8 +396,8 @@ function OathHtb(configs) {
         /* the bid price for the given slot */
         var bidPrice = Number(curBid.price);
 
-        /* the size of the given slot */        
-        var bidSize = [Number(curBid.w), Number(curBid.h)]; 
+        /* the size of the given slot */
+        var bidSize = [Number(curBid.w), Number(curBid.h)];
 
         /* the creative/adm for the given slot that will be rendered if is the winner.
          * Please make sure the URL is decoded and ready to be document.written.
@@ -402,12 +405,12 @@ function OathHtb(configs) {
         var bidCreative = curBid.adm;
 
         /* the dealId if applicable for this slot. */
-        
+
         var bidDealId = '';
 
         if (curBid.hasOwnProperty('dealid')){
             bidDealId = curBid.dealid;
-        } 
+        }
 
         /* explicitly pass */
         var bidIsPass = bidPrice <= 0 ? true : false;
@@ -486,7 +489,7 @@ function OathHtb(configs) {
         //? if (FEATURES.INTERNAL_RENDER) {
         curReturnParcel.targeting.pubKitAdId = pubKitAdId;
         //? }
-        
+
     }
 
     /* =====================================

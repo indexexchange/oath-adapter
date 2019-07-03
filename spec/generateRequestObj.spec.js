@@ -79,8 +79,8 @@ describe('generateRequestObj', function () {
     var requestObject;
     var returnParcels;
        /**
-    * Helper function used to apply assertion functions to each parcel object. 
-    * 
+    * Helper function used to apply assertion functions to each parcel object.
+    *
     * @param {object} Partner configuration.
     * @param {function} assertion function.
     */
@@ -101,8 +101,8 @@ describe('generateRequestObj', function () {
     }
 
     /**
-    * Validates request object format. 
-    * 
+    * Validates request object format.
+    *
     * @param {object} Partner rquest object.
     * @return {object} Validation result object.
     */
@@ -141,19 +141,19 @@ describe('generateRequestObj', function () {
 
         it('should correctly set NA url', function () {
             assertRequestsForPartnerConfig(oneDisplayConfigs.na, ({url}) => {
-                expect(url.match('adserver-us.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
+                expect(url.match('https://adserver-us.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
             });
         });
 
         it('should correctly set EU url', function () {
             assertRequestsForPartnerConfig(oneDisplayConfigs.eu, ({url}) => {
-                expect(url.match('adserver-eu.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
+                expect(url.match('https://adserver-eu.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
             });
         });
 
         it('should correctly set ASIA url', function () {
             assertRequestsForPartnerConfig(oneDisplayConfigs.asia, ({url}) => {
-                expect(url.match('adserver-as.adtech.advertising.com').length, 'url is incorrect').to.equal(1);
+                expect(url.match('https://adserver-as.adtech.advertising.com').length, 'url is incorrect').to.equal(1);
             });
         });
 
@@ -228,9 +228,15 @@ describe('generateRequestObj', function () {
 
         it('should correctly set endpoint url', function () {
             assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
-                expect(url.match('hb.nexage.com', 'url is incorrect').length).to.equal(1);
+                expect(url.match('https://c2shb.ssp.yahoo.com', 'url is incorrect').length).to.equal(1);
             });
         });
+
+      it('should correctly set the secure parameter', function () {
+        assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
+          expect(url.match('secure=1', 'secure param not set').length).to.equal(1);
+        });
+      });
 
         it('should correctly set CMD request paramater', function () {
             assertRequestsForPartnerConfig(oneMobileConfigs.get, ({url}) => {
@@ -271,7 +277,7 @@ describe('generateRequestObj', function () {
         it('should resolve endpoints correctly for different slots', function () {
             assertRequestsForPartnerConfig(combinedConfigs, ({url}, {htSlot}) => {
                 if (htSlot.getId() === 'mobile') {
-                    expect(url.match('hb.nexage.com', 'url is incorrect').length).to.equal(1);
+                    expect(url.match('c2shb.ssp.yahoo.com', 'url is incorrect').length).to.equal(1);
                 } else {
                     expect(url.match('adserver-us.adtech.advertising.com', 'url is incorrect').length).to.equal(1);
                 }
